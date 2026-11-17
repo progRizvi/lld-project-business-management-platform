@@ -4,31 +4,20 @@ import type {
 	LogFormatterInterface,
 	LogTransportInterface,
 } from "../Interface.js";
+import type { logType } from "../LogType.js";
 
+const CONSOLE_METHOD: Record<logType, "debug" | "error" | "info" | "warn"> = {
+	debug: "debug",
+	info: "info",
+	warn: "warn",
+	error: "error",
+	fatal: "error",
+};
 export class ConsoleTransport implements LogTransportInterface {
 	constructor(
 		private formatter: LogFormatterInterface = new PrettyFormatter(),
 	) {}
 	log(entry: LogEntryInterface): void | Promise<void> {
-		const req = entry.requestId ? `[req:${entry.requestId}] ` : "";
-		const line = `[${entry.timestamp.toISOString()}] ${entry.level.toUpperCase()} ${req}${entry.message}`;
-
-		const extra = { ...entry.context, ...entry.meta };
-		const hasExtra = Object.keys(extra).length > 0;
-
-		switch (entry.level) {
-			case "debug":
-				console.debug(line, hasExtra ? extra : "", entry.error ?? "");
-				break;
-			case "warn":
-				console.warn(line, hasExtra ? extra : "", entry.error ?? "");
-				break;
-			case "error":
-			case "fatal":
-				console.error(line, hasExtra ? extra : "", entry.error ?? "");
-				break;
-			default:
-				console.info(line, hasExtra ? extra : "");
-		}
+		console[CONSOLE_METHOD[entry.level]](this.formatter.format(entry));
 	}
 }

@@ -1,3 +1,4 @@
+import path from "path";
 import { JsonFormatter } from "../formatter/JsonFormatter.js";
 import type {
 	LogEntryInterface,
@@ -7,17 +8,27 @@ import type {
 import fs from "fs";
 
 export class JsonTransport implements LogTransportInterface {
-	constructor(formatter: LogFormatterInterface = new JsonFormatter()) {}
+	private readonly dir: string;
+	private ready: Promise<void> | undefined;
+	constructor(
+		private readonly formatter: LogFormatterInterface = new JsonFormatter(),
+		dir = "logs",
+	) {
+		this.dir = path.resolve(process.cwd(), dir);
+	}
+	private ensureDir(): Promise<void> {
+		this.ready ??= fs.promises
+			.mkdir(this.dir, { recursive: true })
+			.then(() => {});
+		return this.ready;
+	}
 	async log(entry: LogEntryInterface): Promise<void> {
-		// save to log file in logs folder
-		const path = "./logs/";
-		const fileName = "log-" + new Date().toISOString() + ".log";
-		const log = `${JSON.stringify(entry)}\n`;
+		const line = this.formatter.format(entry) + "\n";
 
-		try {
-			await fs.promises.appendFile(path + fileName, log);
-		} catch (err) {
-			console.error(err);
-		}
+		const fileName = `log-${entry.timestamp.toISOString().slice(0, 10)}.log`;
+
+		await this.ensureDir();
+
+		await fs.promises.appendFile(path.join(this.dir, fileName), line);
 	}
 }
