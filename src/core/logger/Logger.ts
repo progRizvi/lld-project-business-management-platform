@@ -25,6 +25,10 @@ export class Logger implements LoggerInterface {
 		return Logger.instance;
 	}
 
+	public static resetForTests(): void {
+		Logger.instance = undefined;
+	}
+
 	private write(
 		level: logType,
 		message: string,
