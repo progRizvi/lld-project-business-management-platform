@@ -8,7 +8,7 @@ import { LOG_LEVELS, type logType } from "./LogType.js";
 import { ConsoleTransport } from "./transports/ConsoleTransport.js";
 
 export class Logger implements LoggerInterface {
-	private static instance: Logger;
+	private static instance: Logger | undefined;
 
 	private constructor(
 		private readonly level: logType,
@@ -38,7 +38,7 @@ export class Logger implements LoggerInterface {
 			level,
 			message,
 			timestamp: new Date(),
-			requestId: requestId,
+			requestId,
 			context: { ...this.context },
 			meta,
 			error,
