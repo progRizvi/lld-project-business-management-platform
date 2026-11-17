@@ -7,7 +7,7 @@ import type {
 } from "../Interface.js";
 import fs from "fs";
 
-export class JsonTransport implements LogTransportInterface {
+export class FileTransport implements LogTransportInterface {
 	private readonly dir: string;
 	private ready: Promise<void> | undefined;
 	constructor(
