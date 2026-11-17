@@ -1,7 +1,13 @@
-import type { LogEntryInterface, LogTransportInterface } from "../Interface.js";
+import { JsonFormatter } from "../formatter/JsonFormatter.js";
+import type {
+	LogEntryInterface,
+	LogFormatterInterface,
+	LogTransportInterface,
+} from "../Interface.js";
 import fs from "fs";
 
 export class JsonTransport implements LogTransportInterface {
+	constructor(formatter: LogFormatterInterface = new JsonFormatter()) {}
 	async log(entry: LogEntryInterface): Promise<void> {
 		// save to log file in logs folder
 		const path = "./logs/";

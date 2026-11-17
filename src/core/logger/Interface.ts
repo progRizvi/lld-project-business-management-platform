@@ -47,3 +47,7 @@ export interface LoggerInterface {
 		meta?: Record<string, unknown>,
 	): void;
 }
+
+export interface LogFormatterInterface {
+	format(entry: LogEntryInterface): string;
+}
