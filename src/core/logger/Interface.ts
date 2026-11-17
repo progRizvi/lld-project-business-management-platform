@@ -18,7 +18,6 @@ export interface LoggerOptionsInterface {
 	logLevel?: logType;
 	logTransports?: LogTransportInterface[];
 	context?: Record<string, unknown>;
-	format?: (entry: LogEntryInterface) => string;
 }
 
 export interface LoggerInterface {
