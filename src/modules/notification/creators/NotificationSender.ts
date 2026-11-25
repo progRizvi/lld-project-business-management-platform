@@ -1,5 +1,5 @@
-import type { NotificationProvider } from "./interfaces/NotificationProvider.js";
-import type { NotificationMessageType } from "./NotificationMessageType.js";
+import type { NotificationProvider } from "../interfaces/NotificationProvider.js";
+import type { NotificationMessageType } from "../NotificationMessageType.js";
 
 export abstract class NotificationSender {
 	abstract createProvider(): NotificationProvider;
